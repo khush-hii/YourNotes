@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>YourNotes</title>
+<div class="Title">
+<h1>Save Your Notes</h1>
+</div>
+
+  <link rel="icon" type="image/x-icon" href="logo-without-bg.ico">
+  <link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+img {
+    max-width: 100%;
+}
+</style>
+
+</head>
+<body>
+  <div id="container">
+      <button class="btn-add">Add Note</button>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+
+
+<body>
+
+    
+</script>
+<div id = "clock" onload="currentTime()"></div>
+<style>
+body {
+  font-family: system-ui;
+  color: black;
+  text-align: down;
+}
+</style>
+<div id = "clock" onload="currentTime()"></div>
+<style>
+body {
+  font-family: system-ui;
+  color: black;
+  text-align: down;
+}
+</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;900&display=swap');
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rubik', sans-serif;
+
+}
+#container{
+display: grid;
+grid-template-columns: repeat(auto-fill,200px);
+gap:24px;
+padding:24px;
+}
+
+.sticky{
+height: 200px;
+padding: 16px;
+border: none;
+outline: none;
+resize: none;
+border-radius: 5px;
+font-size: 18px;
+box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.btn-add{
+height: 200px;
+border: none;
+outline: none;
+color:#fff;
+font-size: 20px;
+background-color:#2c3e50;
+cursor: pointer;
+}
+.btn-add:hover{
+  background-color: #34495e;
+  border-radius: 5px;
+}
+</style>
+<script>
+function currentTime() {
+  let date = new Date(); 
+  let hh = date.getHours();
+  let mm = date.getMinutes();
+  let ss = date.getSeconds();
+  let session = "AM";
+
+  if(hh === 0){
+      hh = 12;
+  }
+  if(hh > 12){
+      hh = hh - 12;
+      session = "PM";
+   }
+
+   hh = (hh < 10) ? "0" + hh : hh;
+   mm = (mm < 10) ? "0" + mm : mm;
+   ss = (ss < 10) ? "0" + ss : ss;
+    
+   let time = hh + ":" + mm + ":" + ss + " " + session;
+
+  document.getElementById("clock").innerText = time; 
+  let t = setTimeout(function(){ currentTime() }, 1000);
+}
+
+currentTime();
+</script>
+<script>
+const containerElement=document.getElementById("container");
+const btnAdd=document.getElementsByClassName("btn-add")[0];
+
+
+function getAppStorage(){
+  return JSON.parse(localStorage.getItem("joes-app") || "[]");
+}
+
+getAppStorage().forEach(element => {
+  const textElement=createTextElement(element.id,element.content);
+  containerElement.insertBefore(textElement,btnAdd);
+});
+
+function createTextElement(id,content){
+const textElement=document.createElement('textarea');
+textElement.classList.add('sticky');
+textElement.value=content;
+textElement.placeholder='Enter Your Notes';
+
+textElement.addEventListener("change",()=>{
+  updateNote(id,textElement.value);
+});
+
+textElement.addEventListener("dblclick",()=>{
+  const check=confirm("Are You Sure to Delete ?");
+  if(check){
+    deleteNotes(id,textElement);
+  }
+});
+
+return textElement;
+
+}
+
+//Add New Sticky Note
+function addSticky(){
+  const notes=getAppStorage();
+  const noteObject={
+    id:Math.floor(Math.random()*100000),
+    content:""
+  }
+  const textElement= createTextElement(noteObject.id,noteObject.content);
+  containerElement.insertBefore(textElement,btnAdd);
+  notes.push(noteObject);
+  saveNotes(notes);
+}
+
+btnAdd.addEventListener('click',()=>addSticky());
+
+
+function saveNotes(notes){
+  localStorage.setItem("joes-app",JSON.stringify(notes));
+}
+
+//Update Sticky Note
+function updateNote(id,content){
+  const notes=getAppStorage();
+  const updateElement=notes.filter((note)=>note.id==id)[0];
+  updateElement.content=content;
+  saveNotes(notes);
+}
+
+
+
+function deleteNotes(id,textElement){
+  const notes=getAppStorage().filter((note)=>note.id!=id);
+  saveNotes(notes);
+  containerElement.removeChild(textElement);
+}
+</script>
+<style>
+html
+{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin:0;
+    height:100%;
+    box-sizing: border-box;
+    /* background: linear-gradient(-45deg, #5f01b1, #8502f7, #a643fd, #c88fec);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    height: 100vh; */
+}
+
+html {
+    background: linear-gradient(27deg, #be05f1, #a817c6, #0f83c8, #17a4c6);
+       background-size: 800% 800%;
+
+    -webkit-animation: AnimationName 25s ease infinite;
+    -moz-animation: AnimationName 25s ease infinite;
+    animation: AnimationName 25s ease infinite;
+    animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:82% 0%}
+    50%{background-position:19% 100%}
+    100%{background-position:82% 0%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:82% 0%}
+    50%{background-position:19% 100%}
+    100%{background-position:82% 0%}
+}
+@keyframes AnimationName {
+    0%{background-position:82% 0%}
+    50%{background-position:19% 100%}
+    100%{background-position:82% 0%}
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #ec9f20;
+}
+</style>
+</body>
+</html>
